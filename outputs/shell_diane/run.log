@@ -1,0 +1,25 @@
+Loading weights:   0%|          | 0/198 [00:00<?, ?it/s]Loading weights: 100%|██████████| 198/198 [00:00<00:00, 13220.29it/s]
+[transformers] [1mViTModel LOAD REPORT[0m from: google/vit-base-patch16-224
+Key                 | Status     | 
+--------------------+------------+-
+classifier.weight   | UNEXPECTED | 
+classifier.bias     | UNEXPECTED | 
+pooler.dense.weight | MISSING    | 
+pooler.dense.bias   | MISSING    | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+=== GLB Standard-Skeleton Shell ===
+glb: /Users/rayana/Desktop/World-Mix/outputs/hunyuan_diane/shape.glb
+triangles: 272656 full mesh
+preview_faces: 6000
+view: front
+skeleton: retargeted standard template (53 bones)
+proportion_scales: {'torso': 1.1358690563704235, 'left_arm': 0.6978018515698102, 'right_arm': 0.5806096504240306, 'left_leg': 0.44980748390498876, 'right_leg': 0.5527468260626354}
+vit_source: google/vit-base-patch16-224+geometric
+alignment_passed: False (mean joint err 0.2626)
+alignment_notes: joint RMSE 0.263 > 0.18
+motion_check: {'bone_count': 53, 'max_head_delta': 0.0, 'same_pipeline': True, 'topology_preserved': True}
+rest_preview: /Users/rayana/Desktop/World-Mix/outputs/hunyuan_diane_shell/aligned_rest_shell_front.png
+gif: /Users/rayana/Desktop/World-Mix/outputs/hunyuan_diane_shell/fitted_textured_shell_walk.gif

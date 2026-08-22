@@ -1,0 +1,114 @@
+{
+  "glb": "/Users/rayana/Desktop/World-Mix/outputs/hunyuan_diane/shape.glb",
+  "use_vit": true,
+  "temperature": 0.08,
+  "k_bones": 4,
+  "command": "wave hello",
+  "frames": 8,
+  "alignment": {
+    "prediction_source": "google/vit-base-patch16-224+geometric",
+    "mean_joint_error": 0.26257975842635317,
+    "max_joint_error": 0.5968928601621848,
+    "normalized_mean_joint_error": 0.13413880703810635,
+    "joint_errors": {
+      "pelvis": 0.5968928601621848,
+      "head_top": 0.15351534580051002,
+      "left_shoulder": 0.08046546219528744,
+      "right_shoulder": 0.2811730884282497,
+      "left_hand": 0.13251923286148876,
+      "right_hand": 0.23817798513374097,
+      "left_foot": 0.34307374549595687,
+      "right_foot": 0.274820347333407
+    },
+    "hierarchy_preserved": true,
+    "alignment_passed": false,
+    "joint_tol": 0.18,
+    "proportion_scales": {
+      "torso": 1.1358690563704235,
+      "left_arm": 0.6978018515698102,
+      "right_arm": 0.5806096504240306,
+      "left_leg": 0.44980748390498876,
+      "right_leg": 0.5527468260626354
+    },
+    "mesh_height": 1.957522690296173,
+    "bone_count": 53,
+    "template_bone_count": 53
+  },
+  "topology": {
+    "topology_preserved": true,
+    "name_match": true,
+    "parent_match": true,
+    "count_match": true,
+    "bone_count": 53
+  },
+  "skinning": {
+    "command": "wave hello",
+    "frames": 8,
+    "mean_vertex_displacement": 0.04950907205610495,
+    "max_vertex_displacement": 1.3408036184510623,
+    "normalized_mean_displacement": 0.022688099135550283,
+    "bbox_scale_mean": 1.0648835997974464,
+    "volume_proxy_mean": 1.0575486841081845,
+    "volume_collapse_ratio": 0.9455829457565686,
+    "per_frame": [
+      {
+        "mean_disp": 0.00720392525157949,
+        "max_disp": 0.07923364138392702,
+        "bbox_scale": 1.007504585776353,
+        "volume_proxy": 1.0064275049034606
+      },
+      {
+        "mean_disp": 0.06702831988436828,
+        "max_disp": 1.2454381579466889,
+        "bbox_scale": 1.067276369901364,
+        "volume_proxy": 1.0832338615661805
+      },
+      {
+        "mean_disp": 0.07180979202159864,
+        "max_disp": 1.3408036184510623,
+        "bbox_scale": 1.1032479756078488,
+        "volume_proxy": 1.0820859165572465
+      },
+      {
+        "mean_disp": 0.06855903306518461,
+        "max_disp": 1.3207034417286638,
+        "bbox_scale": 1.0976478892229298,
+        "volume_proxy": 1.0793036198788166
+      },
+      {
+        "mean_disp": 0.06703719137365402,
+        "max_disp": 1.2982048874981562,
+        "bbox_scale": 1.0883230514570836,
+        "volume_proxy": 1.076596454014275
+      },
+      {
+        "mean_disp": 0.0651989885264623,
+        "max_disp": 1.271490980543521,
+        "bbox_scale": 1.0772374222993408,
+        "volume_proxy": 1.0737407302650468
+      },
+      {
+        "mean_disp": 0.04203140107441276,
+        "max_disp": 0.8068353676284583,
+        "bbox_scale": 1.0703269183382973,
+        "volume_proxy": 1.0525738807769889
+      },
+      {
+        "mean_disp": 0.00720392525157949,
+        "max_disp": 0.07923364138392702,
+        "bbox_scale": 1.007504585776353,
+        "volume_proxy": 1.0064275049034606
+      }
+    ]
+  },
+  "summary": {
+    "mean_joint_error": 0.26257975842635317,
+    "normalized_mean_joint_error": 0.13413880703810635,
+    "alignment_passed": 0.0,
+    "topology_preserved": 1.0,
+    "normalized_mean_displacement": 0.022688099135550283,
+    "volume_proxy_mean": 1.0575486841081845,
+    "volume_collapse_ratio": 0.9455829457565686
+  },
+  "name": "vit_T008_k4_wave"
+}

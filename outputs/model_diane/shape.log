@@ -1,0 +1,22 @@
+[hunyuan] cached hunyuan3d-dit-v2-0-turbo/config.yaml (0.00 GB)
+[hunyuan] cached hunyuan3d-dit-v2-0-turbo/model.fp16.safetensors (4.59 GB)
+[hunyuan] cached hunyuan3d-vae-v2-0-turbo/config.yaml (0.00 GB)
+[hunyuan] cached hunyuan3d-vae-v2-0-turbo/model.fp16.safetensors (0.38 GB)
+2026-05-26 22:27:46,191 - hy3dgen.shapgen - INFO - Try to load model from local path: /Users/rayana/.cache/hy3dgen/tencent/Hunyuan3D-2/hunyuan3d-dit-v2-0-turbo
+2026-05-26 22:27:46,194 - hy3dgen.shapgen - INFO - Loading model from /Users/rayana/.cache/hy3dgen/tencent/Hunyuan3D-2/hunyuan3d-dit-v2-0-turbo/model.fp16.safetensors
+PointCrossAttentionEncoder INFO: pc_sharpedge_size is given, using pc_size=5120, pc_sharpedge_size=5120
+2026-05-26 22:28:26,546 - hy3dgen.shapgen - INFO - Try to load model from local path: /Users/rayana/.cache/hy3dgen/tencent/Hunyuan3D-2/hunyuan3d-vae-v2-0-turbo
+2026-05-26 22:28:26,556 - hy3dgen.shapgen - INFO - Loading model from /Users/rayana/.cache/hy3dgen/tencent/Hunyuan3D-2/hunyuan3d-vae-v2-0-turbo/model.fp16.safetensors
+PointCrossAttentionEncoder INFO: pc_sharpedge_size is given, using pc_size=5120, pc_sharpedge_size=5120
+2026-05-26 22:28:45,957 - hy3dgen.shapgen - INFO - The parameters `mc_algo` is deprecated, and will be removed in future versions.
+Please use: 
+from hy3dgen.shapegen.models.autoencoders import SurfaceExtractors
+pipeline.vae.surface_extractor = SurfaceExtractors[mc_algo]() instead
+
+Diffusion Sampling::   0%|          | 0/5 [00:00<?, ?it/s]Diffusion Sampling::  20%|██        | 1/5 [00:19<01:17, 19.34s/it]Diffusion Sampling::  40%|████      | 2/5 [00:34<00:50, 16.89s/it]Diffusion Sampling::  60%|██████    | 3/5 [01:00<00:42, 21.21s/it]Diffusion Sampling::  80%|████████  | 4/5 [01:22<00:21, 21.42s/it]Diffusion Sampling:: 100%|██████████| 5/5 [01:56<00:00, 26.06s/it]Diffusion Sampling:: 100%|██████████| 5/5 [01:56<00:00, 23.38s/it]
+2026-05-26 22:30:52,116 - hy3dgen.shapgen - INFO - FlashVDMVolumeDecoding Resolution: [63, 126, 252]
+FlashVDM Volume Decoding:   0%|          | 0/64 [00:00<?, ?it/s]FlashVDM Volume Decoding:   2%|▏         | 1/64 [00:00<00:06,  9.22it/s]FlashVDM Volume Decoding:  20%|██        | 13/64 [00:00<00:00, 60.45it/s]FlashVDM Volume Decoding:  30%|██▉       | 19/64 [00:00<00:01, 31.75it/s]FlashVDM Volume Decoding:  36%|███▌      | 23/64 [00:00<00:01, 28.64it/s]FlashVDM Volume Decoding:  42%|████▏     | 27/64 [00:00<00:01, 26.77it/s]FlashVDM Volume Decoding:  47%|████▋     | 30/64 [00:01<00:01, 24.85it/s]FlashVDM Volume Decoding:  52%|█████▏    | 33/64 [00:01<00:01, 23.20it/s]FlashVDM Volume Decoding:  56%|█████▋    | 36/64 [00:01<00:01, 22.53it/s]FlashVDM Volume Decoding:  61%|██████    | 39/64 [00:01<00:01, 22.41it/s]FlashVDM Volume Decoding:  66%|██████▌   | 42/64 [00:01<00:01, 17.69it/s]FlashVDM Volume Decoding:  69%|██████▉   | 44/64 [00:01<00:01, 14.99it/s]FlashVDM Volume Decoding:  72%|███████▏  | 46/64 [00:02<00:01, 14.65it/s]FlashVDM Volume Decoding:  75%|███████▌  | 48/64 [00:02<00:01, 14.91it/s]FlashVDM Volume Decoding:  78%|███████▊  | 50/64 [00:02<00:00, 15.29it/s]FlashVDM Volume Decoding:  81%|████████▏ | 52/64 [00:02<00:00, 15.67it/s]FlashVDM Volume Decoding:  84%|████████▍ | 54/64 [00:02<00:00, 15.51it/s]FlashVDM Volume Decoding:  88%|████████▊ | 56/64 [00:02<00:00, 15.82it/s]FlashVDM Volume Decoding:  91%|█████████ | 58/64 [00:02<00:00, 15.86it/s]FlashVDM Volume Decoding:  94%|█████████▍| 60/64 [00:02<00:00, 15.45it/s]FlashVDM Volume Decoding:  97%|█████████▋| 62/64 [00:03<00:00, 14.45it/s]FlashVDM Volume Decoding: 100%|██████████| 64/64 [00:03<00:00, 13.98it/s]FlashVDM Volume Decoding: 100%|██████████| 64/64 [00:03<00:00, 19.29it/s]
+/Users/rayana/Desktop/World-Mix/third_party/Hunyuan3D-2/hy3dgen/shapegen/models/autoencoders/volume_decoders.py:81: UserWarning: Using a non-tuple sequence for multidimensional indexing is deprecated and will be changed in pytorch 2.9; use x[tuple(seq)] instead of x[seq]. In pytorch 2.9 this will be interpreted as tensor index, x[torch.tensor(seq)], which will result either in an error or a different result (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/autograd/python_variable_indexing.cpp:353.)
+  sliced = padded[slice_dims]
+=== Hunyuan Shape ===
+shape_glb: /Users/rayana/Desktop/World-Mix/outputs/hunyuan_diane/shape.glb

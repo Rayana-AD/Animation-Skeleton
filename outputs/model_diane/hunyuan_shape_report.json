@@ -1,0 +1,8 @@
+{
+  "text": "diane princess warrior",
+  "shape_glb": "/Users/rayana/Desktop/World-Mix/outputs/hunyuan_diane/shape.glb",
+  "model_path": "tencent/Hunyuan3D-2",
+  "subfolder": "hunyuan3d-dit-v2-0-turbo",
+  "device": "mps",
+  "octree_resolution": 256
+}

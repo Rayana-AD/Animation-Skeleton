@@ -1,0 +1,17 @@
+# 骨骼对齐 / 蒙皮 参数消融（仅 character，不含 terrain）
+# 在 World-Mix 根目录运行:
+#   python scripts/run_character_alignment_study.py --config experiments/configs/character_alignment_study.yaml
+
+output_root: outputs/alignment_study
+
+glb: outputs/model_diane/shape.glb
+frames: 8
+
+ablations:
+  - {name: geometric_T008_k4, use_vit: false, temperature: 0.08, k_bones: 4, command: "walk forward"}
+  - {name: vit_T008_k4, use_vit: true, temperature: 0.08, k_bones: 4, command: "walk forward"}
+  - {name: vit_T012_k4, use_vit: true, temperature: 0.12, k_bones: 4, command: "walk forward"}
+  - {name: vit_T020_k4, use_vit: true, temperature: 0.20, k_bones: 4, command: "walk forward"}
+  - {name: vit_T008_k2, use_vit: true, temperature: 0.08, k_bones: 2, command: "walk forward"}
+  - {name: vit_T008_k6, use_vit: true, temperature: 0.08, k_bones: 6, command: "walk forward"}
+  - {name: vit_T008_k4_wave, use_vit: true, temperature: 0.08, k_bones: 4, command: "wave hello"}

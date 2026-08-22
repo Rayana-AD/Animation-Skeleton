@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "worldmix-skeleton"
+version = "0.1.0"
+description = "GLB mesh + fixed 53-bone skeleton + language/instruction → LBS animation"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "World-Mix contributors" }]
+keywords = ["animation", "rigging", "glb", "skeleton", "lbs"]
+dependencies = [
+    "numpy>=1.24",
+    "pillow>=10.0",
+    "scipy>=1.11",
+    "matplotlib>=3.7",
+    "torch>=2.1",
+    "transformers>=4.36",
+]
+
+[project.optional-dependencies]
+study = ["pyyaml>=6.0"]
+dev = ["pytest>=7.4", "pyyaml>=6.0"]
+
+[project.scripts]
+worldmix-animate = "worldmix.cli.animate:main"
+worldmix-align-study = "worldmix.cli.align_study:main"
+worldmix-language-avatar = "worldmix.cli.language_avatar:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["worldmix*"]
+
+[tool.setuptools.package-data]
+worldmix = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
