@@ -84,10 +84,25 @@ def _preview_triangles(
     max_faces: int | None,
     *,
     seed: int = 42,
+    batched_shell: bool = False,
+    outer_keep_fraction: float = 0.75,
+    view: str = "front",
 ) -> np.ndarray:
-    if max_faces is None or len(triangles) <= max_faces:
-        return triangles
-    return select_render_triangles(vertices, triangles, max_faces=max_faces, seed=seed)
+    if not batched_shell:
+        if max_faces is None or len(triangles) <= max_faces:
+            return triangles
+        return select_render_triangles(vertices, triangles, max_faces=max_faces, seed=seed)
+
+    shell = TexturedMeshShell(
+        vertices=np.asarray(vertices, dtype=np.float64),
+        triangles=np.asarray(triangles, dtype=np.int64),
+        uvs=None,
+        texture=None,
+    )
+    outer = shell.visible_triangles(view=view, keep_fraction=outer_keep_fraction)
+    if max_faces is None or len(outer) <= max_faces:
+        return outer
+    return select_render_triangles(vertices, outer, max_faces=max_faces, seed=seed)
 
 
 def save_front_shell_animation(
@@ -100,6 +115,9 @@ def save_front_shell_animation(
     panel_width: int = 480,
     panel_height: int = 720,
     max_faces: int | None = None,
+    batched_raster: bool = False,
+    triangle_batch: int = 8192,
+    outer_keep_fraction: float = 0.75,
 ) -> Path:
     """Front-view GIF: LBS-deformed mesh rasterized (optional face budget for dense GLBs)."""
     output_path = Path(output_path)
@@ -112,7 +130,13 @@ def save_front_shell_animation(
     bone_indices = shell["bone_indices"]
     weights = shell["weights"]
     vertex_colors = shell["vertex_colors"]
-    render_tris = _preview_triangles(vertices, triangles, max_faces)
+    render_tris = _preview_triangles(
+        vertices,
+        triangles,
+        max_faces,
+        batched_shell=batched_raster,
+        outer_keep_fraction=outer_keep_fraction,
+    )
 
     if motion_sequence is None:
         motion_sequence = [walk_pose(i, frames) for i in range(frames)]
@@ -135,6 +159,9 @@ def save_front_shell_animation(
             height=panel_height,
             vertex_colors=vertex_colors,
             fast_outer_shell=False,
+            batched=batched_raster,
+            triangle_batch=triangle_batch,
+            keep_fraction=outer_keep_fraction,
         )
         frame_path = tmp_dir / f"frame_{frame_idx:03d}.png"
         save_raster_frame(frame_path, rgb)
@@ -250,8 +277,17 @@ def save_rest_front_preview(
     panel_width: int = 480,
     panel_height: int = 720,
     max_faces: int | None = None,
+    batched_raster: bool = False,
+    triangle_batch: int = 8192,
+    outer_keep_fraction: float = 0.75,
 ) -> Path:
-    render_tris = _preview_triangles(shell["vertices"], shell["triangles"], max_faces)
+    render_tris = _preview_triangles(
+        shell["vertices"],
+        shell["triangles"],
+        max_faces,
+        batched_shell=batched_raster,
+        outer_keep_fraction=outer_keep_fraction,
+    )
     rgb = rasterize_textured_mesh(
         shell["vertices"],
         render_tris,
@@ -262,6 +298,9 @@ def save_rest_front_preview(
         height=panel_height,
         vertex_colors=shell["vertex_colors"],
         fast_outer_shell=False,
+        batched=batched_raster,
+        triangle_batch=triangle_batch,
+        keep_fraction=outer_keep_fraction,
     )
     return save_raster_frame(output_path, rgb)
 

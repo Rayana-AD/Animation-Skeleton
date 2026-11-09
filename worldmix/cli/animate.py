@@ -32,7 +32,14 @@ def main() -> None:
     parser.add_argument("--motion", default=None, help="Motion JSON (same format as language_avatar)")
     parser.add_argument("--panel-width", type=int, default=480)
     parser.add_argument("--panel-height", type=int, default=720)
-    parser.add_argument("--max-faces", type=int, default=None, help="Triangle budget for preview raster (e.g. 6000)")
+    parser.add_argument("--max-faces", type=int, default=None, help="Triangle budget for preview raster (e.g. 48000)")
+    parser.add_argument(
+        "--batched-preview",
+        action="store_true",
+        help="Outer-shell + depth-sorted triangle batches (dense GLB homepage quality)",
+    )
+    parser.add_argument("--raster-batch", type=int, default=8192, help="Triangles per raster batch")
+    parser.add_argument("--outer-keep", type=float, default=0.75, help="Front visible shell fraction before face cap")
     parser.add_argument("--front-only", action="store_true", help="Single front panel (faster preview)")
     args = parser.parse_args()
 
@@ -52,7 +59,14 @@ def main() -> None:
     motion_sequence = load_motion_json(args.motion) if args.motion else text_command_to_motion(args.command, frames=args.frames)
 
     check = verify_motion_path_matches_standard(shell, motion_sequence)
-    preview_kw = dict(panel_width=args.panel_width, panel_height=args.panel_height, max_faces=args.max_faces)
+    preview_kw = dict(
+        panel_width=args.panel_width,
+        panel_height=args.panel_height,
+        max_faces=args.max_faces,
+        batched_raster=args.batched_preview,
+        triangle_batch=args.raster_batch,
+        outer_keep_fraction=args.outer_keep,
+    )
     if args.front_only:
         rest_png = save_rest_front_preview(shell, output / "aligned_rest_shell_front.png", **preview_kw)
         gif_path = save_front_shell_animation(
@@ -80,8 +94,10 @@ def main() -> None:
     print("=== GLB Standard-Skeleton Shell ===")
     print(f"glb: {glb_path.resolve()}")
     print(f"triangles: {len(shell['triangles'])} full mesh")
+    if args.batched_preview:
+        print(f"batched_preview: outer_keep={args.outer_keep} raster_batch={args.raster_batch}")
     if args.max_faces:
-        print(f"preview_faces: {min(args.max_faces, len(shell['triangles']))}")
+        print(f"preview_face_cap: {args.max_faces} (full mesh {len(shell['triangles'])})")
     print(f"view: {'front' if args.front_only else 'front+side'}")
     print(f"skeleton: retargeted standard template ({len(shell['bones'])} bones)")
     print(f"proportion_scales: {shell['alignment'].proportion_scales}")

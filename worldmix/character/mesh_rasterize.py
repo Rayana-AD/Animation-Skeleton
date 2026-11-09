@@ -79,6 +79,59 @@ def _rasterize_triangle_vectorized(
         color[min_y : max_y + 1, min_x : max_x + 1][closer] = rgb[closer]
 
 
+def rasterize_ortho_batched(
+    vertices: np.ndarray,
+    triangles: np.ndarray,
+    uvs: np.ndarray | None,
+    texture: Image.Image | None,
+    *,
+    view: str = "front",
+    width: int = 768,
+    height: int = 1024,
+    background: tuple[float, float, float] = (0.18, 0.18, 0.20),
+    vertex_colors: np.ndarray | None = None,
+    triangle_batch: int = 8192,
+) -> np.ndarray:
+    """Orthographic raster without mesh adjacency — triangles processed in depth-sorted batches."""
+    shell = TexturedMeshShell(
+        vertices=np.asarray(vertices, dtype=np.float64),
+        triangles=np.asarray(triangles, dtype=np.int64),
+        uvs=None if uvs is None else np.asarray(uvs, dtype=np.float64),
+        texture=texture,
+    )
+    px, py, depth = shell.project_ortho(view=view, width=width, height=height)
+    tris = shell.triangles
+    if vertex_colors is None:
+        if shell.uvs is not None and shell.texture is not None:
+            vertex_colors = _sample_texture(shell.texture, shell.uvs).astype(np.float64)
+        else:
+            vertex_colors = np.full((shell.vertex_count, 3), [0.72, 0.22, 0.48], dtype=np.float64)
+
+    color = np.zeros((height, width, 3), dtype=np.float64)
+    color[:] = np.asarray(background, dtype=np.float64)
+    zbuf = np.full((height, width), -np.inf, dtype=np.float64)
+    tex = np.asarray(texture.convert("RGB"), dtype=np.float64) / 255.0 if texture is not None else None
+    tri_depth = depth[tris].mean(axis=1)
+    order = np.argsort(tri_depth)
+    batch = max(256, int(triangle_batch))
+
+    for start in range(0, len(order), batch):
+        chunk = order[start : start + batch]
+        for ti in chunk:
+            i0, i1, i2 = tris[ti]
+            _rasterize_triangle_vectorized(
+                color,
+                zbuf,
+                np.array([px[i0], px[i1], px[i2]]),
+                np.array([py[i0], py[i1], py[i2]]),
+                depth[[i0, i1, i2]],
+                vertex_colors[[i0, i1, i2]],
+                shell.uvs[[i0, i1, i2]] if shell.uvs is not None else None,
+                tex,
+            )
+    return color
+
+
 def rasterize_mesh_shell(
     shell: TexturedMeshShell,
     *,
@@ -138,17 +191,34 @@ def rasterize_textured_mesh(
     vertex_colors: np.ndarray | None = None,
     outer_shell_only: bool = True,
     fast_outer_shell: bool = False,
+    batched: bool = False,
+    triangle_batch: int = 8192,
+    keep_fraction: float = 0.75,
 ) -> np.ndarray:
-    """Backward-compatible wrapper around TexturedMeshShell rasterization."""
+    """Rasterize mesh; use ``batched=True`` for dense GLBs (skips adjacency, batch triangle loops)."""
     tris = np.asarray(triangles, dtype=np.int64)
-    if fast_outer_shell:
-        from worldmix.character.glb_gaussian_shell import outer_shell_face_mask
-
-        tris = tris[outer_shell_face_mask(np.asarray(vertices, dtype=np.float64), tris)]
+    verts = np.asarray(vertices, dtype=np.float64)
+    if fast_outer_shell or (batched and outer_shell_only):
+        shell = TexturedMeshShell(vertices=verts, triangles=tris, uvs=uvs, texture=texture)
+        tris = shell.visible_triangles(view=view, keep_fraction=keep_fraction)
         outer_shell_only = False
 
+    if batched:
+        return rasterize_ortho_batched(
+            verts,
+            tris,
+            uvs,
+            texture,
+            view=view,
+            width=width,
+            height=height,
+            background=background,
+            vertex_colors=vertex_colors,
+            triangle_batch=triangle_batch,
+        )
+
     shell = TexturedMeshShell(
-        vertices=np.asarray(vertices, dtype=np.float64),
+        vertices=verts,
         triangles=tris,
         uvs=None if uvs is None else np.asarray(uvs, dtype=np.float64),
         texture=texture,
@@ -162,6 +232,7 @@ def rasterize_textured_mesh(
         background=background,
         vertex_colors=vertex_colors,
         outer_shell_only=outer_shell_only,
+        keep_fraction=keep_fraction,
     )
 
 
